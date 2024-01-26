@@ -1,6 +1,4 @@
- **Here's the README code, incorporating best practices:**
 
-```markdown
 # Streamlin 
 
 Efficiently manage your tasks with Streamlin, a task management application built using the MERN stack and AWS services.
