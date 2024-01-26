@@ -12,7 +12,7 @@ Efficiently manage your tasks with Streamlin, a task management application buil
 
 1. **Clone the repository:**
    ```bash
-   git clone [[https://github.com/your-username/streamlin.git](https://github.com/your-username/streamlin.git)](https://github.com/shubhamk98/TaskManagement.git)
+   git clone [[[https://github.com/your-username/streamlin.git](https://github.com/your-username/streamlin.git)](https://github.com/shubhamk98/TaskManagement.git)](https://github.com/shubhamk98/TaskManagement.git)
    ```
 
 2. **Navigate to the project directory:**
