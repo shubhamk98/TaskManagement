@@ -47,6 +47,3 @@ Efficiently manage your tasks with Streamline, a task management application bui
 - Replace placeholder AWS URLs with your actual service endpoints.
 
 ## Happy Task Management! 
-```
-
-
