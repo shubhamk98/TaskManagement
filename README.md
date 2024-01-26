@@ -1,7 +1,7 @@
 
-# Streamlin 
+# Streamline
 
-Efficiently manage your tasks with Streamlin, a task management application built using the MERN stack and AWS services.
+Efficiently manage your tasks with Streamline, a task management application built using the MERN stack and AWS services.
 
 ## Technologies
 
