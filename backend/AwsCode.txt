@@ -1,0 +1,122 @@
+// AWS Lambda Function that will handle GET,DELETE,PATCH,POST request.
+
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, QueryCommand, UpdateCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({});
+const dynamo = DynamoDBDocumentClient.from(client);
+
+
+export const handler = async (event) => {
+    let body;
+    let statusCode = 200;
+    const headers = {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+        
+    };
+
+    try {
+        const httpMethod = event.httpMethod; 
+        console.log("RequestType",httpMethod)
+        console.log("Body",event.body)
+
+        switch (httpMethod) {
+            case 'POST':
+                // Handle POST logic
+                await createTask(JSON.parse(event.body));
+                break;
+
+            case 'GET':
+                // Handle GET logic
+                const id = event.queryStringParameters.userId;
+                body = await getTasks(id);
+                break;
+
+            case 'PATCH':
+                // Handle PATCH logic
+                const { userId, taskId, task, taskStatus } = JSON.parse(event.body);
+                await updateTask(userId, taskId, task, taskStatus);
+                break;
+
+            case 'DELETE':
+                // Handle DELETE logic
+                const { userId: deleteUserId, taskId: deleteTaskId } = JSON.parse(event.body);
+                await deleteTask(deleteUserId, deleteTaskId);
+                break;
+
+            default:
+                throw new Error('Invalid HTTP Method');
+        }
+    } catch (err) {
+        statusCode = 400;
+        body = err.message;
+    } finally {
+        body = JSON.stringify(body);
+    }
+
+    return {
+        statusCode,
+        body,
+        headers,
+    };
+};
+
+// Rest of your code remains unchanged
+
+
+const createTask = async (data) => {
+    await dynamo.send(
+        new PutCommand({
+            TableName: 'task-app',
+            Item: data,
+        })
+    );
+};
+
+const getTasks = async (userId) => {
+    const result = await dynamo.send(
+        new QueryCommand({
+            TableName: 'task-app',
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': userId,
+            },
+        })
+    );
+
+    return result.Items;
+};
+
+const updateTask = async (userId, taskId, newTask, newStatus) => {
+    await dynamo.send(
+        new UpdateCommand({
+            TableName: 'task-app',
+            Key: {
+                userId,
+                taskId,
+            },
+            UpdateExpression: 'SET #task = :task, #status = :status',
+            ExpressionAttributeNames: {
+                '#task': 'task',
+                '#status': 'taskStatus',
+            },
+            ExpressionAttributeValues: {
+                ':task': newTask,
+                ':status': newStatus,
+            },
+        })
+    );
+};
+
+const deleteTask = async (userId, taskId) => {
+    await dynamo.send(
+        new DeleteCommand({
+            TableName: 'task-app',
+            Key: {
+                userId,
+                taskId,
+            },
+        })
+    );
+};
