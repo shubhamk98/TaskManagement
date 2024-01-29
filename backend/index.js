@@ -23,6 +23,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+console.log(process.env.FRONTEND_URL)
 
 app.use("/api/auth", router);
 
